@@ -191,8 +191,9 @@ const routes: Bun.Serve.Options<undefined, `/api/auth/${string}`>["routes"] = {
         return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
       }
 
+      const { password, ...restOfUser } = user;
       // Return user info (this will be used to populate your React state)
-      return Response.json({ success: true, user });
+      return Response.json({ success: true, user: restOfUser });
     },
   },
   "/api/auth/refresh": {
