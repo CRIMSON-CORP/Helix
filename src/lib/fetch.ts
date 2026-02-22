@@ -1,5 +1,5 @@
 // apiFetch.ts
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = process.env.DOMAIN;
 const REFRESH_PATH = "/api/auth/refresh";
 
 let refreshPromise: Promise<boolean> | null = null;
