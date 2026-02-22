@@ -43,7 +43,8 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["projects", "activities"] });
+      queryClient.invalidateQueries({ queryKey: ["projects", selectedWorkspace] });
+      queryClient.invalidateQueries({ queryKey: ["activities"] });
     },
     onError: (error) => {
       toast.error(error.message);
