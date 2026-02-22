@@ -171,7 +171,7 @@ export function LoginPage({ onLogin, onSignup }: LoginPageProps) {
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700 text-white border-0 h-11"
             >
-              {isSubmitting ? "Loading..." : isLogin ? "Create account" : "Sign in"}
+              {isSubmitting ? "Loading..." : isLogin ? "Sign in" : "Create account"}
             </Button>
           </form>
 
