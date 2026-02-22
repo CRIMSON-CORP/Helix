@@ -1,0 +1,1 @@
+ALTER TABLE "workspace" RENAME COLUMN "description" TO "icon";

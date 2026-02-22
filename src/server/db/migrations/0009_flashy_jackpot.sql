@@ -1,0 +1,1 @@
+ALTER TABLE "task" RENAME COLUMN "name" TO "title";
