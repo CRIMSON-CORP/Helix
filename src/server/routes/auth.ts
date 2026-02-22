@@ -165,7 +165,7 @@ const routes: Bun.Serve.Options<undefined, `/api/auth/${string}`>["routes"] = {
       );
       headers.append(
         "Set-Cookie",
-        `refreshToken=; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Path=/api/refresh`,
+        `refreshToken=; HttpOnly; Secure; SameSite=Lax; Max-Age=0; Path=/api/auth/refresh`,
       );
 
       return Response.json({ success: true }, { headers, status: 200 });
