@@ -1,5 +1,4 @@
 // apiFetch.ts
-const BASE_URL = process.env.DOMAIN;
 const REFRESH_PATH = "/api/auth/refresh";
 
 let refreshPromise: Promise<boolean> | null = null;
@@ -20,7 +19,7 @@ export async function apiFetch(
     },
   };
 
-  const response = await fetch(`${BASE_URL}${endpoint}`, config);
+  const response = await fetch(`${endpoint}`, config);
 
   // 1. Check if we hit a 401
   if (response.status === 401) {
@@ -35,7 +34,7 @@ export async function apiFetch(
     if (!refreshPromise) {
       refreshPromise = (async () => {
         try {
-          const res = await fetch(`${BASE_URL}${REFRESH_PATH}`, {
+          const res = await fetch(`${REFRESH_PATH}`, {
             method: "POST",
             credentials: "include",
             headers: { "X-Requested-With": "CrimsonApp" },
@@ -52,7 +51,7 @@ export async function apiFetch(
 
     if (success) {
       // Retry original request
-      return fetch(`${BASE_URL}${endpoint}`, config);
+      return fetch(`${endpoint}`, config);
     } else {
       if (secure) {
         window.location.href = "/login";
