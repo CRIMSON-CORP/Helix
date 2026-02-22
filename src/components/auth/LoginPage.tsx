@@ -9,7 +9,6 @@ import type { User } from "@/server/db/schema";
 
 interface LoginPageProps {
   onLogin: (user: User) => void;
-  users: User[];
   onSignup: (user: User) => void;
 }
 
@@ -18,7 +17,7 @@ type FormErrorState = {
   [K in keyof FieldErrors]?: string[];
 };
 
-export function LoginPage({ onLogin, users, onSignup }: LoginPageProps) {
+export function LoginPage({ onLogin, onSignup }: LoginPageProps) {
   const [isLogin, setIsLogin] = useState(true);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -57,7 +56,7 @@ export function LoginPage({ onLogin, users, onSignup }: LoginPageProps) {
         setIsSubmitting(false);
       }
     } else {
-      const newUser: Omit<User, "id"> & { password: string } = {
+      const newUser: Omit<User, "id" | "created_at"> & { password: string } = {
         name,
         email,
         username,
@@ -172,7 +171,7 @@ export function LoginPage({ onLogin, users, onSignup }: LoginPageProps) {
               type="submit"
               className="w-full bg-purple-600 hover:bg-purple-700 text-white border-0 h-11"
             >
-              {isLogin ? "Sign in" : "Create account"}
+              {isSubmitting ? "Loading..." : isLogin ? "Create account" : "Sign in"}
             </Button>
           </form>
 
@@ -210,7 +209,7 @@ export function LoginPage({ onLogin, users, onSignup }: LoginPageProps) {
             }}
             className="font-medium text-purple-400 hover:text-purple-300 underline underline-offset-4 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmitting ? "Loading..." : isLogin ? "Sign up" : "Sign in"}
+            {isLogin ? "Sign up" : "Sign in"}
           </button>
         </p>
       </div>

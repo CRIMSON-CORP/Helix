@@ -5,7 +5,7 @@ import { Sidebar } from "./components/layout/Sidebar";
 import { Dashboard } from "./components/dashboard/Dashboard";
 import { ProjectBoard } from "./components/project/ProjectBoard";
 import { MyTasks } from "./components/dashboard/MyTasks";
-import type { Task, User } from "./server/db/schema";
+import type { User } from "./server/db/schema";
 import { CreateWorkspaceModal } from "./components/workspace/CreateWorkspaceModal";
 import { CreateProjectModal } from "./components/project/CreateProjectModal";
 import { LoginPage } from "./components/auth/LoginPage";
@@ -18,7 +18,6 @@ import { Toaster } from "react-hot-toast";
 import { useBoardView } from "./store/useBoardView";
 import { useSelectedWorkspace } from "./store/useSelectedWorkspace";
 import { useSelectedProject } from "./store/useSelectedProject";
-import useUsers from "./hooks/useUsers";
 const queryClient = new QueryClient();
 
 export function App() {
@@ -55,12 +54,8 @@ function HelixApp() {
       return data.user;
     },
     staleTime: Infinity,
+    retry: false,
   });
-
-  const { users } = useUsers();
-
-  // Flatten tasks to state so we can mutate them securely
-  const [allTasks, setAllTasks] = useState<Task[]>([]);
 
   if (isLoading || isWorskpaceLoading) {
     return null;
@@ -77,7 +72,7 @@ function HelixApp() {
   };
 
   if (!isAuthenticated || !currentUser) {
-    return <LoginPage onLogin={handleLogin} onSignup={handleSignup} users={users} />;
+    return <LoginPage onLogin={handleLogin} onSignup={handleSignup} />;
   }
 
   const currentWorkspace =
@@ -88,12 +83,6 @@ function HelixApp() {
   const handleLogout = () => {
     setCurrentUser(null);
     setIsAuthenticated(false);
-  };
-
-  const handleTaskMove = (taskId: string | number, newStatus: Task["status"]) => {
-    setAllTasks((prev) =>
-      prev.map((t) => (t.id.toString() === taskId.toString() ? { ...t, status: newStatus } : t)),
-    );
   };
 
   return (
