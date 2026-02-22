@@ -2,7 +2,7 @@ import { checkAuth } from "../utils";
 import db from "../db";
 import { activity } from "../db/schema";
 import { WorkspaceParamsSchema } from "@/schemas/zod";
-import { eq } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 
 const routes: Bun.Serve.Options<undefined, `/api/activities${string}`>["routes"] = {
   "/api/activities": {
@@ -34,7 +34,8 @@ const routes: Bun.Serve.Options<undefined, `/api/activities${string}`>["routes"]
         .select()
         .from(activity)
         .where(eq(activity.workspace_id, parseInt(result.data.workspace_id)))
-        .limit(10);
+        .limit(10)
+        .orderBy(desc(activity.created_at));
 
       return Response.json({ success: true, activities }, { status: 200 });
     },

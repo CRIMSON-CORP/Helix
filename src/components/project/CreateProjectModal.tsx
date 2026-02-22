@@ -8,6 +8,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "@/lib/fetch";
 import toast from "react-hot-toast";
 import { useSelectedWorkspace } from "@/store/useSelectedWorkspace";
+import type { Project } from "@/server/db/schema";
 
 interface CreateProjectModalProps {
   isOpen: boolean;
@@ -37,14 +38,19 @@ export function CreateProjectModal({ isOpen, onClose }: CreateProjectModalProps)
         setName("");
         setDescription("");
         onClose();
-        return data;
+        return data.project;
       } else {
         throw new Error(data.error);
       }
     },
-    onSuccess: () => {
+    onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: ["projects", selectedWorkspace] });
-      queryClient.invalidateQueries({ queryKey: ["activities"] });
+      queryClient.setQueryData(["projects", selectedWorkspace], (projects: Project[]) => [
+        ...projects,
+        project,
+      ]);
+
+      queryClient.invalidateQueries({ queryKey: ["workspace", selectedWorkspace, "activities"] });
     },
     onError: (error) => {
       toast.error(error.message);
