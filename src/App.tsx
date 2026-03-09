@@ -9,6 +9,7 @@ import type { User } from "./server/db/schema";
 import { CreateWorkspaceModal } from "./components/workspace/CreateWorkspaceModal";
 import { CreateProjectModal } from "./components/project/CreateProjectModal";
 import { LoginPage } from "./components/auth/LoginPage";
+import { CreateWorkspaceView } from "./components/workspace/CreateWorkspaceView";
 import "./index.css";
 import "../styles/globals.css";
 import { apiFetch } from "./lib/fetch";
@@ -78,8 +79,6 @@ function HelixApp() {
   const currentWorkspace =
     workspaces.find((w) => w.id.toString() === selectedWorkspace?.toString()) ?? workspaces[0];
 
-  if (!currentWorkspace) return null;
-
   const handleLogout = () => {
     setCurrentUser(null);
     setIsAuthenticated(false);
@@ -95,7 +94,9 @@ function HelixApp() {
         />
       }
     >
-      {view === "project" && selecetedProject ? (
+      {!currentWorkspace ? (
+        <CreateWorkspaceView />
+      ) : view === "project" && selecetedProject ? (
         <ProjectBoard />
       ) : view === "my-tasks" ? (
         <MyTasks />

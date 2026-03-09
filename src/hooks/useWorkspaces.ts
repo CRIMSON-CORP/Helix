@@ -7,10 +7,11 @@ import { useEffect, useRef } from "react";
 
 function useWorkspaces() {
   const hasSetInitialWorkspace = useRef(false);
+  const currentUser = useAuthentication((state) => state.currentUser);
   const setSelectedWorkspace = useSelectedWorkspace((state) => state.setSelectedWorkspace);
   const { isAuthenticated } = useAuthentication((state) => state);
   const { data: workspaces = [], isLoading: isWorskpaceLoading } = useQuery<Workspace[]>({
-    queryKey: ["workspace"],
+    queryKey: ["workspace", currentUser?.id],
     queryFn: async () => {
       const res = await apiFetch("/api/workspace");
       if (!res.ok) {

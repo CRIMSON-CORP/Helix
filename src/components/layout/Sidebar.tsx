@@ -50,23 +50,30 @@ export function Sidebar({ onOpenWorkspaceModal, onOpenProjectModal, onLogout }: 
       {/* Workspace Switcher */}
       <div className="p-4 border-b border-white/5">
         <div className="relative">
-          <button
-            onClick={() => setIsWorkspaceMenuOpen(!isWorkspaceMenuOpen)}
-            className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-white/5 transition-colors group"
+          <div
+            className={cn(
+              "w-full flex items-center justify-between p-2 rounded-xl transition-colors group",
+              workspaces.length > 0 && "hover:bg-white/5 cursor-pointer",
+            )}
+            onClick={() => workspaces.length > 0 && setIsWorkspaceMenuOpen(!isWorkspaceMenuOpen)}
           >
             <div className="flex items-center gap-3">
               <div className="h-10 w-10 rounded-xl bg-linear-to-br from-purple-500 to-indigo-600 flex items-center justify-center text-xl shadow-lg shadow-purple-500/20">
-                {currentWorkspace?.icon}
+                {currentWorkspace?.icon ?? "H"}
               </div>
               <div className="text-left">
                 <p className="font-semibold text-sm leading-tight text-white/90 group-hover:text-white">
-                  {currentWorkspace?.name}
+                  {currentWorkspace?.name ?? "Helix"}
                 </p>
-                <p className="text-xs text-white/40 group-hover:text-white/60">Free Plan</p>
+                <p className="text-xs text-white/40 group-hover:text-white/60">
+                  {workspaces.length > 0 ? "Free Plan" : "Get Started"}
+                </p>
               </div>
             </div>
-            <ChevronDown className="h-4 w-4 text-white/40 group-hover:text-white/60" />
-          </button>
+            {workspaces.length > 0 && (
+              <ChevronDown className="h-4 w-4 text-white/40 group-hover:text-white/60" />
+            )}
+          </div>
 
           {/* Dropdown */}
           {isWorkspaceMenuOpen && (
@@ -147,18 +154,20 @@ export function Sidebar({ onOpenWorkspaceModal, onOpenProjectModal, onLogout }: 
         </div>
 
         {/* Projects */}
-        <div>
-          <div className="flex items-center justify-between px-3 mb-2">
-            <p className="text-xs font-medium text-white/30 uppercase tracking-wider">Projects</p>
-            <button
-              onClick={onOpenProjectModal}
-              className="text-white/30 hover:text-white transition-colors"
-            >
-              <Plus className="h-3 w-3" />
-            </button>
+        {workspaces.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between px-3 mb-2">
+              <p className="text-xs font-medium text-white/30 uppercase tracking-wider">Projects</p>
+              <button
+                onClick={onOpenProjectModal}
+                className="text-white/30 hover:text-white transition-colors"
+              >
+                <Plus className="h-3 w-3" />
+              </button>
+            </div>
+            {currentWorkspace && <WorkspaceProjects />}
           </div>
-          {currentWorkspace && <WorkspaceProjects />}
-        </div>
+        )}
       </div>
 
       {/* User Profile */}

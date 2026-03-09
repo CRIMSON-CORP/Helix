@@ -5,7 +5,7 @@ export const signUpUserSchema = z.object({
   name: z.string().min(3, "name must not be less than 3 Characters").max(255),
   email: z.email("Please provide a valid email!"),
   username: z.string().min(3, "Username must not be less than 3 Characters").max(255),
-  password: z.string().min(8, "Password must not be less than 3 Characters").max(255),
+  password: z.string().min(8, "Password must not be less than 8 Characters").max(255),
 });
 
 export const signInUserSchema = z.object({
